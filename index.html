@@ -35,22 +35,18 @@
         </main>
 
         <script>
-            const engineList = [["Wiktionary", "https://en.wiktionary.org/wiki/%s#South_Levantine_Arabic"],
-                                ["Living Arabic", "https://livingarabic.com/en/search?q=%s"],
-                                ["Levantine Reader", "https://levantinereader.com/search?q=%s"],
-                                ["Mo3jam", "https://en.mo3jam.com/search?q=%s"],
-                                ["Reverso", "https://context.reverso.net/translation/arabic-english/%s"],
-                                ["YouGlish", "https://youglish.com/pronounce/%s/arabic?"]];
-
-            const form    = document.getElementById("search");
-            const results = document.getElementById("results");
-
-            form.addEventListener("submit", (event) => {
-                event.preventDefault();
+            function searchTerm(term) {
+                const results = document.getElementById("results");
                 results.innerHTML = "";
 
-                term = form.elements["term"].value; 
                 if (term == "") return;
+
+                const engineList = [["Wiktionary", "https://en.wiktionary.org/wiki/%s#South_Levantine_Arabic"],
+                                    ["Living Arabic", "https://livingarabic.com/en/search?q=%s"],
+                                    ["Levantine Reader", "https://levantinereader.com/search?q=%s"],
+                                    ["Mo3jam", "https://en.mo3jam.com/search?q=%s"],
+                                    ["Reverso", "https://context.reverso.net/translation/arabic-english/%s"],
+                                    ["YouGlish", "https://youglish.com/pronounce/%s/arabic?"]];
 
                 engineList.forEach(item => {
                     let link = document.createElement("a");
@@ -60,7 +56,21 @@
                     link.target = "_blank";
                     results.append(link);
                 });
+            }
+
+            const form = document.getElementById("search");
+
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+
+                term = form.elements["term"].value;
+                searchTerm(term);
             });
+
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const urlTerm = urlParams.get('q');
+            if (urlTerm != null) searchTerm(urlTerm);
         </script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
